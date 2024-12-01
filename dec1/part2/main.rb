@@ -1,7 +1,5 @@
-
 class InputParser
-  attr_reader :left_list
-  attr_reader :right_list
+  attr_reader :left_list, :right_list
 
   def initialize(file_name)
     @file_name = file_name
@@ -31,19 +29,19 @@ class Solver
   end
 
   def execute
-    @left_list.sort!
-    @right_list.sort!
+    @right_hash = {}
+    @right_hash.default = 0
+    @right_list.each { |num| @right_hash[num] += 1 }
 
-    if @left_list.length != @right_list.length
-      throw new Exception("Different list lengths are not supported")
-    end
-
-    compute_distances
+    compute_similarity
   end
 
-  def compute_distances
-    pairs = @left_list.zip(@right_list)
-    pairs.map { |l, r| (r - l).abs }.reduce(&:+)
+  private
+
+  def compute_similarity
+    @left_list.reduce(0) do |similarity, num|
+      next similarity if @right_hash[num] == 0 # instead of .nil? because we previously used .default(0)
+      similarity += num * @right_hash[num]
+    end
   end
 end
-
