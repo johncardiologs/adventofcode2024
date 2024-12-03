@@ -8,13 +8,13 @@ class InputParser
   end
 
   def execute
-    File.foreach(@file_name) { |line| parse_line(line) }
+    File.foreach(@file_name) { |report| parse_report(report) }
   end
 
   private
 
-  def parse_line(line)
-    first, second = line.split
+  def parse_report(report)
+    first, second = report.split
     @left_list.push(first.to_i)
     @right_list.push(second.to_i)
   end

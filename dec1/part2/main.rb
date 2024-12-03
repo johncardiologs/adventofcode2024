@@ -8,13 +8,13 @@ class InputParser
   end
 
   def execute
-    File.foreach(@file_name) { |line| parse_line(line) }
+    File.foreach(@file_name) { |report| parse_report(report) }
   end
 
   private
 
-  def parse_line(line)
-    first, second = line.split
+  def parse_report(report)
+    first, second = report.split
     @left_list.push(first.to_i)
     @right_list.push(second.to_i)
   end
@@ -41,7 +41,8 @@ class Solver
   def compute_similarity
     @left_list.reduce(0) do |similarity, num|
       next similarity if @right_hash[num] == 0 # instead of .nil? because we previously used .default(0)
-      similarity += num * @right_hash[num]
+
+      similarity + num * @right_hash[num]
     end
   end
 end
